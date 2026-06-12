@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-pitch: #0e1b12;
+  --color-pitch-light: #16271b;
+  --color-paper: #f4f1e8;
+  --color-paper-dim: #e8e3d4;
+  --color-card: #e63946;
+  --color-grass: #2a9d8f;
+  --color-gold: #ffb703;
+  --color-ink: #0e1b12;
+  --font-display: "Bricolage Grotesque", "Arial Black", sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Courier New", monospace;
+}
+
+:root {
+  --background: var(--color-paper);
+  --foreground: var(--color-ink);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+}
+
+.scoreboard-digit {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.stadium-heading {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.led-dots {
+  background-image: radial-gradient(
+    circle,
+    rgba(244, 241, 232, 0.06) 1px,
+    transparent 1px
+  );
+  background-size: 8px 8px;
+}
+
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.live-dot {
+  animation: pulse-live 1.4s ease-in-out infinite;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-dot {
+    animation: none;
+  }
+}
