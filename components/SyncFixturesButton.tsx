@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function SyncFixturesButton() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
@@ -20,6 +22,7 @@ export default function SyncFixturesButton() {
         setMessage(`Hata: ${data.error}`);
       } else {
         setMessage(`${data.teams} takım, ${data.matches} maç senkronize edildi.`);
+        router.refresh();
       }
     } catch {
       setMessage("Senkronizasyon başarısız oldu.");
