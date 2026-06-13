@@ -85,7 +85,7 @@ function mapStatus(game: Wc26Game): "SCHEDULED" | "LIVE" | "FINISHED" {
   if (
     game.time_elapsed &&
     game.time_elapsed !== "finished" &&
-    !["not started", "ns", ""].includes(String(game.time_elapsed).toLowerCase())
+    !["not started", "notstarted", "ns", ""].includes(String(game.time_elapsed).toLowerCase())
   ) {
     return "LIVE";
   }
