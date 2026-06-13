@@ -3,10 +3,6 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { fetchWorldCupGames, fetchWorldCupTeams, gameToMatchRow, teamToRow } from "@/lib/worldcup26/client";
 
 export async function POST(req: NextRequest) {
-  const secret = req.headers.get("x-cron-secret");
-  if (secret !== process.env.CRON_SECRET) {
-    return NextResponse.json({ error: "Yetkisiz" }, { status: 401 });
-  }
 
   try {
     const [wcTeams, wcGames] = await Promise.all([fetchWorldCupTeams(), fetchWorldCupGames()]);

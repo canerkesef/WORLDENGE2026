@@ -13,9 +13,6 @@ export default function SyncFixturesButton() {
     try {
       const res = await fetch("/api/sync-fixtures", {
         method: "POST",
-        headers: {
-          "x-cron-secret": prompt("CRON_SECRET değerini girin:") ?? "",
-        },
       });
       const data = await res.json();
 
