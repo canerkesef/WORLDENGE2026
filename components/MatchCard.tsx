@@ -1,5 +1,6 @@
 import type { Match } from "@/lib/types/database";
 import { formatMatchDate, STAGE_LABELS, teamLabel } from "@/lib/utils/format";
+import { displayStatus } from "@/lib/match-status";
 
 type MatchCardProps = {
   match: Match;
@@ -10,8 +11,9 @@ type MatchCardProps = {
 };
 
 export default function MatchCard({ match, prediction, rightSlot }: MatchCardProps) {
-  const isLive = match.status === "LIVE";
-  const isFinished = match.status === "FINISHED";
+  const effectiveStatus = displayStatus(match.status, match.match_date);
+  const isLive = effectiveStatus === "LIVE";
+  const isFinished = effectiveStatus === "FINISHED";
 
   return (
     <div className="bg-pitch text-paper rounded-2xl overflow-hidden led-dots">
