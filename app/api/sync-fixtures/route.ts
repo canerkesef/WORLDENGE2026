@@ -1,17 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { fetchWorldCupFixtures, fixtureToMatchRow, extractTeams } from "@/lib/api-football/client";
+import { fetchWorldCupGames, fetchWorldCupTeams, gameToMatchRow, teamToRow } from "@/lib/worldcup26/client";
 
-/**
- * POST /api/sync-fixtures
- *
- * API-Football'dan Dünya Kupası 2026 fikstür ve sonuçlarını çekip
- * teams ve matches tablolarına yazar. Maç sonuçlandığında (status=FINISHED)
- * veritabanı trigger'ı otomatik olarak puanları hesaplar.
- *
- * Güvenlik: CRON_SECRET header'ı ile korunur. Vercel Cron veya
- * harici bir zamanlayıcı (ör. cron-job.org) ile periyodik çağırın.
- */
 export async function POST(req: NextRequest) {
   const secret = req.headers.get("x-cron-secret");
   if (secret !== process.env.CRON_SECRET) {
@@ -19,11 +9,10 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const fixtures = await fetchWorldCupFixtures();
+    const [wcTeams, wcGames] = await Promise.all([fetchWorldCupTeams(), fetchWorldCupGames()]);
     const supabase = createAdminClient();
 
-    // 1. Takımları upsert et
-    const teams = extractTeams(fixtures);
+    const teams = wcTeams.map(teamToRow);
     if (teams.length > 0) {
       const { error: teamsError } = await supabase
         .from("teams")
@@ -31,8 +20,7 @@ export async function POST(req: NextRequest) {
       if (teamsError) throw teamsError;
     }
 
-    // 2. Maçları upsert et (trigger sonuçlanan maçları otomatik puanlar)
-    const matches = fixtures.map(fixtureToMatchRow);
+    const matches = wcGames.map(gameToMatchRow);
     if (matches.length > 0) {
       const { error: matchesError } = await supabase
         .from("matches")

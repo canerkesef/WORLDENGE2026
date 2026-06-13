@@ -1,14 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { fetchWorldCupFixtures, fixtureToMatchRow, extractTeams } from "@/lib/api-football/client";
+import { fetchWorldCupGames, fetchWorldCupTeams, gameToMatchRow, teamToRow } from "@/lib/worldcup26/client";
 
-/**
- * GET /api/cron-sync
- *
- * Vercel Cron tarafından saatlik çağrılır (bkz. vercel.json).
- * Vercel cron istekleri "Authorization: Bearer $CRON_SECRET" header'ı
- * ile gelir (CRON_SECRET ortam değişkenini Vercel panelinde ayarlayın).
- */
 export async function GET(req: NextRequest) {
   const authHeader = req.headers.get("authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
@@ -16,16 +9,16 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const fixtures = await fetchWorldCupFixtures();
+    const [wcTeams, wcGames] = await Promise.all([fetchWorldCupTeams(), fetchWorldCupGames()]);
     const supabase = createAdminClient();
 
-    const teams = extractTeams(fixtures);
+    const teams = wcTeams.map(teamToRow);
     if (teams.length > 0) {
       const { error } = await supabase.from("teams").upsert(teams, { onConflict: "id" });
       if (error) throw error;
     }
 
-    const matches = fixtures.map(fixtureToMatchRow);
+    const matches = wcGames.map(gameToMatchRow);
     if (matches.length > 0) {
       const { error } = await supabase.from("matches").upsert(matches, { onConflict: "id" });
       if (error) throw error;
