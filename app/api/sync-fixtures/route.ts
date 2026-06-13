@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
     });
   } catch (err) {
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : "Bilinmeyen hata" },
+      { error: err instanceof Error ? err.message : JSON.stringify(err) },
       { status: 500 }
     );
   }
