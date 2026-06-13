@@ -52,9 +52,7 @@ export default async function TahminlerPage() {
 
   // Turnuva başladı mı? (ilk maç tarihi geçmişse)
   const firstMatch = (matches ?? [])[0] as Match | undefined;
-  const tournamentLocked = firstMatch
-    ? new Date(firstMatch.match_date) < new Date()
-    : false;
+  const tournamentLocked = !!tournamentPrediction;
 
   return (
     <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10">
