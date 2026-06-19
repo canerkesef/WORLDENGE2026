@@ -90,8 +90,9 @@ export default async function TahminlerPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {grouped.get(stage)!.map((m) => {
               const pred = predictionMap.get(m.id);
-              const locked =
-                m.status !== "SCHEDULED" || new Date(m.match_date) <= new Date();
+            const locked =
+              m.status !== "SCHEDULED" ||
+              new Date(m.match_date).getTime() - 5 * 60 * 1000 <= Date.now();
 
               return (
                 <MatchCard
