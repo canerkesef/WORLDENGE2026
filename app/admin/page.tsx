@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import AdminMatchList from "@/components/AdminMatchList";
 import SyncFixturesButton from "@/components/SyncFixturesButton";
 import SetPasswordForm from "@/components/SetPasswordForm";
+import AdminUserList from "@/components/AdminUserList";
 import type { Match } from "@/lib/types/database";
 
 export default async function AdminPage() {
@@ -44,6 +45,7 @@ export default async function AdminPage() {
         </div>
         <SyncFixturesButton />
           <SetPasswordForm />
+          <AdminUserList />
       </div>
 
       <AdminMatchList matches={(matches ?? []) as Match[]} />
