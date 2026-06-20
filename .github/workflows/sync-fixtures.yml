@@ -11,5 +11,9 @@ jobs:
     steps:
       - name: Call cron-sync endpoint
         run: |
-          curl -sf -X GET "https://worldengecup-2026v5.vercel.app/api/cron-sync" \
-            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"
+          curl -sS -X GET "https://worldengecup-2026v5.vercel.app/api/cron-sync" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            -w "\nHTTP_STATUS:%{http_code}\n" \
+            -o response.json
+          cat response.json
+          STATUS=$(grep -o '[0-9]*' <<< "$(tail -1 response.json 2>/dev/null)")
