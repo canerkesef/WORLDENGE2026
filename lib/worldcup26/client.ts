@@ -1,3 +1,4 @@
+import fixedDates from "./worldcup-fixed-dates.json";
 /**
  * worldcup26.ir ile entegrasyon (ücretsiz, kimlik doğrulamasız)
  *
@@ -106,7 +107,7 @@ export function gameToMatchRow(game: Wc26Game) {
     group_name: groupName,
     home_team_id: game.home_team_id === "0" ? null : String(game.home_team_id),
     away_team_id: game.away_team_id === "0" ? null : String(game.away_team_id),
-    match_date: parseLocalDate(game.local_date),
+    match_date: (fixedDates as Record<string, string>)[`${game.home_team_name_en}|${game.away_team_name_en}`] ?? parseLocalDate(game.local_date),
     venue: null,
     status: mapStatus(game),
     home_score: toScore(game.home_score),
