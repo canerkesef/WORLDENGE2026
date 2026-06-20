@@ -26,7 +26,7 @@ export default function GirisPage() {
       return;
     }
 
-    router.push("/tahminler");
+    router.push("/");
     router.refresh();
   }
 
