@@ -92,7 +92,7 @@ export default async function TahminlerPage() {
               const pred = predictionMap.get(m.id);
             const locked =
               m.status !== "SCHEDULED" ||
-              new Date(m.match_date).getTime() - 5 * 60 * 1000 <= Date.now();
+              new Date(m.match_date).getTime() - 15 * 60 * 1000 <= Date.now();
 
               return (
                 <MatchCard
